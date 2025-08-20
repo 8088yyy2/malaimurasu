@@ -12,6 +12,11 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 BASE_URL = "https://epaper.malaimurasu.com/"
 LOG_FILE = "log.txt"
 
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+}
+
 def log(message):
     print(message)
     with open(LOG_FILE, "a", encoding="utf-8") as f:
@@ -24,23 +29,47 @@ def get_yesterday_date():
     yesterday = datetime.now() - timedelta(days=1)
     return yesterday.strftime("%Y/%m/%d"), yesterday.strftime("%Y/%m/%d").split("/")
 
-def get_number_of_pages():
+def get_number_of_pages(year, month, day, edition, page_prefix):
+    """Try to scrape number of pages. If not found, fall back to trial download."""
     try:
-        response = requests.get(BASE_URL, verify=certifi.where(), timeout=10)
+        edition_url = f"{BASE_URL}{year}/{month}/{day}/{edition}/"
+        response = requests.get(edition_url, headers=HEADERS, verify=certifi.where(), timeout=10)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, "html.parser")
         select = soup.find("select", {"id": "idGotoPageList"})
         options = select.find_all("option") if select else []
-        return len(options)
+
+        if options:
+            return len(options)
+        else:
+            log("[WARNING] No <select> found, falling back to trial detection...")
+            return detect_pages_by_trial(year, month, day, edition, page_prefix)
+
     except Exception as e:
         log(f"[ERROR] Fetching number of pages: {e}")
-        return 0
+        return detect_pages_by_trial(year, month, day, edition, page_prefix)
+
+def detect_pages_by_trial(year, month, day, edition, page_prefix, max_pages=50):
+    """Fallback: try downloading until a page fails."""
+    count = 0
+    for i in range(1, max_pages + 1):
+        page_number = f"{i:02d}"
+        test_url = f"{BASE_URL}{year}/{month}/{day}/{edition}/{page_prefix}{page_number}.pdf"
+        try:
+            response = requests.head(test_url, headers=HEADERS, timeout=5, verify=certifi.where())
+            if response.status_code == 200:
+                count += 1
+            else:
+                break
+        except:
+            break
+    return count
 
 def download_pdf(url, filename, retries=3, page_num=None):
     for attempt in range(retries):
         log(f"[INFO] Attempt {attempt + 1} for page {page_num}")
         try:
-            response = requests.get(url, stream=True, timeout=10, verify=certifi.where())
+            response = requests.get(url, stream=True, timeout=10, verify=certifi.where(), headers=HEADERS)
             response.raise_for_status()
             with open(filename, 'wb') as f:
                 for chunk in response.iter_content(chunk_size=8192):
@@ -76,7 +105,7 @@ def main():
     edition = "Chennai"
     page_prefix = "CHE_P"
 
-    num_pages = get_number_of_pages()
+    num_pages = get_number_of_pages(year, month, day, edition, page_prefix)
     if num_pages == 0:
         log("[FATAL] No pages found.")
         return
