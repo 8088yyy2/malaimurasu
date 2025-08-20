@@ -1,6 +1,5 @@
 import os
 import requests
-from bs4 import BeautifulSoup
 from datetime import datetime, timedelta
 from PyPDF2 import PdfMerger
 import time
@@ -14,7 +13,11 @@ LOG_FILE = "log.txt"
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
-                  "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+                  "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://epaper.malaimurasu.com/",
+    "Connection": "keep-alive",
 }
 
 def log(message):
@@ -29,28 +32,8 @@ def get_yesterday_date():
     yesterday = datetime.now() - timedelta(days=1)
     return yesterday.strftime("%Y/%m/%d"), yesterday.strftime("%Y/%m/%d").split("/")
 
-def get_number_of_pages(year, month, day, edition, page_prefix):
-    """Try to scrape number of pages. If not found, fall back to trial download."""
-    try:
-        edition_url = f"{BASE_URL}{year}/{month}/{day}/{edition}/"
-        response = requests.get(edition_url, headers=HEADERS, verify=certifi.where(), timeout=10)
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, "html.parser")
-        select = soup.find("select", {"id": "idGotoPageList"})
-        options = select.find_all("option") if select else []
-
-        if options:
-            return len(options)
-        else:
-            log("[WARNING] No <select> found, falling back to trial detection...")
-            return detect_pages_by_trial(year, month, day, edition, page_prefix)
-
-    except Exception as e:
-        log(f"[ERROR] Fetching number of pages: {e}")
-        return detect_pages_by_trial(year, month, day, edition, page_prefix)
-
 def detect_pages_by_trial(year, month, day, edition, page_prefix, max_pages=50):
-    """Fallback: try downloading until a page fails."""
+    """Detect number of pages by trying HEAD requests until failure."""
     count = 0
     for i in range(1, max_pages + 1):
         page_number = f"{i:02d}"
@@ -105,7 +88,8 @@ def main():
     edition = "Chennai"
     page_prefix = "CHE_P"
 
-    num_pages = get_number_of_pages(year, month, day, edition, page_prefix)
+    log(f"[INFO] Detecting pages for {year}/{month}/{day}/{edition}...")
+    num_pages = detect_pages_by_trial(year, month, day, edition, page_prefix)
     if num_pages == 0:
         log("[FATAL] No pages found.")
         return
