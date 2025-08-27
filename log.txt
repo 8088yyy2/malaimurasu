@@ -1,35 +1,29 @@
-[INFO] Detecting pages for 2025/08/25/Chennai...
-[INFO] Total pages found: 10
-[INFO] Downloading page 1: https://epaper.malaimurasu.com/2025/08/25/Chennai/CHE_P01.pdf
+[INFO] Detecting pages for 2025/08/26/Chennai...
+[INFO] Total pages found: 8
+[INFO] Downloading page 1: https://epaper.malaimurasu.com/2025/08/26/Chennai/CHE_P01.pdf
 [INFO] Attempt 1 for page 1
 [SUCCESS] Page 1 downloaded.
-[INFO] Downloading page 2: https://epaper.malaimurasu.com/2025/08/25/Chennai/CHE_P02.pdf
+[INFO] Downloading page 2: https://epaper.malaimurasu.com/2025/08/26/Chennai/CHE_P02.pdf
 [INFO] Attempt 1 for page 2
 [SUCCESS] Page 2 downloaded.
-[INFO] Downloading page 3: https://epaper.malaimurasu.com/2025/08/25/Chennai/CHE_P03.pdf
+[INFO] Downloading page 3: https://epaper.malaimurasu.com/2025/08/26/Chennai/CHE_P03.pdf
 [INFO] Attempt 1 for page 3
 [SUCCESS] Page 3 downloaded.
-[INFO] Downloading page 4: https://epaper.malaimurasu.com/2025/08/25/Chennai/CHE_P04.pdf
+[INFO] Downloading page 4: https://epaper.malaimurasu.com/2025/08/26/Chennai/CHE_P04.pdf
 [INFO] Attempt 1 for page 4
 [SUCCESS] Page 4 downloaded.
-[INFO] Downloading page 5: https://epaper.malaimurasu.com/2025/08/25/Chennai/CHE_P05.pdf
+[INFO] Downloading page 5: https://epaper.malaimurasu.com/2025/08/26/Chennai/CHE_P05.pdf
 [INFO] Attempt 1 for page 5
 [SUCCESS] Page 5 downloaded.
-[INFO] Downloading page 6: https://epaper.malaimurasu.com/2025/08/25/Chennai/CHE_P06.pdf
+[INFO] Downloading page 6: https://epaper.malaimurasu.com/2025/08/26/Chennai/CHE_P06.pdf
 [INFO] Attempt 1 for page 6
 [SUCCESS] Page 6 downloaded.
-[INFO] Downloading page 7: https://epaper.malaimurasu.com/2025/08/25/Chennai/CHE_P07.pdf
+[INFO] Downloading page 7: https://epaper.malaimurasu.com/2025/08/26/Chennai/CHE_P07.pdf
 [INFO] Attempt 1 for page 7
 [SUCCESS] Page 7 downloaded.
-[INFO] Downloading page 8: https://epaper.malaimurasu.com/2025/08/25/Chennai/CHE_P08.pdf
+[INFO] Downloading page 8: https://epaper.malaimurasu.com/2025/08/26/Chennai/CHE_P08.pdf
 [INFO] Attempt 1 for page 8
 [SUCCESS] Page 8 downloaded.
-[INFO] Downloading page 9: https://epaper.malaimurasu.com/2025/08/25/Chennai/CHE_P09.pdf
-[INFO] Attempt 1 for page 9
-[SUCCESS] Page 9 downloaded.
-[INFO] Downloading page 10: https://epaper.malaimurasu.com/2025/08/25/Chennai/CHE_P10.pdf
-[INFO] Attempt 1 for page 10
-[SUCCESS] Page 10 downloaded.
 [INFO] Combining PDFs...
 [SUCCESS] Combined into malaimurasu.pdf
 [CLEANUP] Deleted page_01.pdf
@@ -40,6 +34,4 @@
 [CLEANUP] Deleted page_06.pdf
 [CLEANUP] Deleted page_07.pdf
 [CLEANUP] Deleted page_08.pdf
-[CLEANUP] Deleted page_09.pdf
-[CLEANUP] Deleted page_10.pdf
 [INFO] Done!
